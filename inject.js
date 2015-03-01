@@ -8,7 +8,7 @@ function processJsDom(targetFile, selector, cb, errors, window) {
     cb(errors);
   }
 
-  var elements = window.document.querySelectorAll('script');
+  var elements = window.document.querySelectorAll(selector);
   for (var i = 0; i < elements.length; i++) {
     elements[i].innerHTML = targetFile.$components[i];
   }
