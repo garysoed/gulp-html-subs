@@ -3,11 +3,11 @@ var jsdom   = require('jsdom');
 var path    = require('path');
 var through = require('through2');
 
-function processJsDom(targetFile, cb, errors, window) {
+function processJsDom(targetFile, selector, cb, errors, window) {
   if (errors) {
     cb(errors);
   }
-  
+
   var elements = window.document.querySelectorAll('script');
   for (var i = 0; i < elements.length; i++) {
     elements[i].innerHTML = targetFile.$components[i];
@@ -18,7 +18,7 @@ function processJsDom(targetFile, cb, errors, window) {
   cb();
 }
 
-function Inject(targetFiles) {
+function Inject(targetFiles, selector) {
   return through.obj(function(file, enc, cb) {
     if (file.isBuffer()) {
       var ext = path.extname(file.path);
@@ -35,7 +35,10 @@ function Inject(targetFiles) {
       };
 
       if (isReady) {
-        jsdom.env(String(targetFile.contents), [], processJsDom.bind(this, targetFile, cb));
+        jsdom.env(
+            String(targetFile.contents),
+            [],
+            processJsDom.bind(this, targetFile, selector, cb));
       } else {
         cb();
       }

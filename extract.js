@@ -2,12 +2,12 @@ var gutil   = require('gulp-util');
 var jsdom   = require('jsdom');
 var through = require('through2');
 
-function processJsDom(targetFile, file, cb, errors, window) {
+function processJsDom(targetFile, selector, file, cb, errors, window) {
   if (errors) {
     cb(errors);
   }
 
-  var elements = window.document.querySelectorAll('script');
+  var elements = window.document.querySelectorAll(selector);
 
   // Create all the components first before calling push, since push can lead to the next
   // step.
@@ -39,7 +39,7 @@ function processJsDom(targetFile, file, cb, errors, window) {
   cb();
 }
 
-function Extract(targetFiles) {
+function Extract(targetFiles, selector) {
   return through.obj(function(file, enc, cb) {
     if (file.isBuffer()) {
       var html = String(file.contents);
@@ -53,7 +53,7 @@ function Extract(targetFiles) {
       targetFile.$components = {};
       targetFiles[file.path] = targetFile;
 
-      jsdom.env(html, [], processJsDom.bind(this, targetFile, file, cb));
+      jsdom.env(html, [], processJsDom.bind(this, targetFile, selector, file, cb));
     }
 
     if (file.isStream()) {

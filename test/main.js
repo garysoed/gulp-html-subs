@@ -45,7 +45,7 @@ describe('gulp-html-subs', function () {
       };
       var srcFile = loadFixtureFile('extract.html');
 
-      var plugin = htmlSubs().extract;
+      var plugin = htmlSubs('script').extract;
 
       plugin.on('data', function(newFile) {
         var path = newFile.path;
@@ -67,7 +67,7 @@ describe('gulp-html-subs', function () {
       var expectedFile = createFile('extract-empty.html.0', new Buffer(''));
       var srcFile = loadFixtureFile('extract-empty.html');
 
-      var plugin = htmlSubs().extract;
+      var plugin = htmlSubs('script').extract;
       plugin.on('data', function(newFile) {
         expectFileEquals(expectedFile, newFile);
         done();
@@ -88,7 +88,7 @@ describe('gulp-html-subs', function () {
         '2': loadFixtureFile('inject.html.2')
       };
 
-      var subs = htmlSubs();
+      var subs = htmlSubs('script');
       subs.extract.write(inputFile);
       subs.extract.on('data', function(file) {
         var path = file.path;
