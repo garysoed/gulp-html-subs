@@ -21,8 +21,8 @@ function processJsDom(targetFile, selector, cb, errors, window) {
 function Inject(targetFiles, selector) {
   return through.obj(function(file, enc, cb) {
     if (file.isBuffer()) {
-      var ext = path.extname(file.path);
-      var filepath = file.path.substring(0, file.path.length - ext.length);
+      var ext = path.extname(file.htmlSubsPath);
+      var filepath = file.htmlSubsPath.substring(0, file.htmlSubsPath.length - ext.length);
       var id = ext.substring(1);
       var targetFile = targetFiles[filepath];
 

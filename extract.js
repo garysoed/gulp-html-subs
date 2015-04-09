@@ -16,24 +16,28 @@ function processJsDom(targetFile, selector, file, cb, errors, window) {
   }
 
   for (var i = 0; i < elements.length; i++) {
-    this.push(new gutil.File({
+    var newFile = new gutil.File({
       cwd: file.cwd,
-      path: file.path + '.' + i,
+      path: file.path,
       base: file.base,
       stat: file.stat,
       contents: new Buffer(elements[i].innerHTML)
-    }));
+    });
+    newFile.htmlSubsPath = file.path + '.' + i;
+    this.push(newFile);
   };
 
   if (elements.length <= 0) {
-    // Send out a fake file so the pipe can still go.
-    this.push(new gutil.File({
+    var newFile = new gutil.File({
       cwd: file.cwd,
-      path: file.path + '.0',
+      path: file.path,
       base: file.base,
       stat: file.stat,
       contents: new Buffer('')
-    }));
+    });
+    newFile.htmlSubsPath = file.path + '.0';
+    // Send out a fake file so the pipe can still go.
+    this.push(newFile);
   }
 
   cb();
